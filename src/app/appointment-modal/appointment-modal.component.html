@@ -1,0 +1,53 @@
+<div class="appointment-modal">
+  <h5 mat-dialog-title *ngIf="!modalData.uuid">Create New Appointment</h5>
+  <h5 mat-dialog-title *ngIf="modalData.uuid">Modify Appointment</h5>
+  <div [formGroup]="appointmentFormGroup">
+    <div mat-dialog-content>
+      <mat-form-field class="custom-form-field">
+        <mat-label>Appointment Title</mat-label>
+        <input formControlName="title" matInput />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>Select Date</mat-label>
+        <input matInput [matDatepicker]="datePicker" formControlName="date" />
+        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>Start Time</mat-label>
+        <input matInput formControlName="startTime" type="time" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>End Time</mat-label>
+        <input matInput formControlName="endTime" type="time" />
+      </mat-form-field>
+      <div
+        *ngIf="appointmentFormGroup.errors && appointmentFormGroup.errors['timeError']"
+        class="error-message"
+      >
+        End time must be later than start time.
+      </div>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button type="submit" mat-flat-button (click)="onSubmit()">
+        <span *ngIf="modalData.uuid">Modify Appointment</span>
+        <span *ngIf="!modalData.uuid">Create Appointment</span>
+      </button>
+      <button
+        (click)="onDelete()"
+        *ngIf="modalData.uuid"
+        class="delete-btn"
+        mat-stroked-button
+      >
+        Remove
+      </button>
+      <button
+        class="cancel-btn"
+        mat-stroked-button
+        (click)="onClose()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

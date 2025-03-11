@@ -1,0 +1,12 @@
+.appointment-modal {
+    padding: 30px 30px 20px;
+    .custom-form-field {
+      width: 100%;
+    }
+    .error {
+      color: red;
+    }
+    .delete-btn,.cancel-btn{
+      margin-left: 10px;
+    }
+  }
