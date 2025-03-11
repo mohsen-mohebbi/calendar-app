@@ -90,7 +90,7 @@
               *ngFor="let date of week"
               cdkDropList
               (cdkDropListDropped)="drop($event, date)"
-              [cdkDropListData]="appointments"
+              [cdkDropListData]="this._CalenderService.appointments"
               [class.today]="isToday(date)"
               [ngStyle]="{ opacity: isCurrentMonth(date) ? '1' : '0.5' }"
             >
@@ -105,7 +105,7 @@
                 {{ date.getDate() }}
               </div>
               <div class="appointments">
-                <ng-container *ngFor="let appointment of appointments">
+                <ng-container *ngFor="let appointment of this._CalenderService.appointments">
                   <div
                     tabindex="0"
                     *ngIf="isSameDate(appointment.date, date)"
@@ -153,7 +153,7 @@
               *ngFor="let day of weekDays; index as i"
               cdkDropList
               (cdkDropListDropped)="drop($event, monthDays[i], timeSlot)"
-              [cdkDropListData]="appointments"
+              [cdkDropListData]="this._CalenderService.appointments"
             >
               <div
                 (click)="selectDate(monthDays[i], timeSlot)"
@@ -202,7 +202,7 @@
             <td
               cdkDropList
               (cdkDropListDropped)="drop($event, monthDays[0], slot)"
-              [cdkDropListData]="appointments"
+              [cdkDropListData]="this._CalenderService.appointments"
             >
               <div
                 (click)="selectDate(monthDays[0], slot)"
