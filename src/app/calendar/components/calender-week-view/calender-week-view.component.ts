@@ -9,10 +9,13 @@ import { CalenderService } from '../../../shared/services/calendar.service';
 })
 export class CalenderWeekViewComponent {
   constructor(public dialog: MatDialog , public _CalenderService:CalenderService) {
+    this._CalenderService.weeks=[];
+    this._CalenderService.monthDays=[];
+    this._CalenderService.weeks=[];
+    this._CalenderService.timeSlots=[];
+    
     this._CalenderService.appointments.forEach((appointment) => {
       this._CalenderService.currentView = this._CalenderService.CalendarView.Week;
-      this._CalenderService.generateView(this._CalenderService.currentView, this._CalenderService.viewDate);
-      
       appointment.color = this._CalenderService.getRandomColor();
     });
     this._CalenderService.generateView(this._CalenderService.currentView, this._CalenderService.viewDate);

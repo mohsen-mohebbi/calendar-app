@@ -17,11 +17,13 @@ export class CalendarComponent {
   constructor(public dialog: MatDialog ,
     private router: Router,
     public _CalenderService:CalenderService) {
-    this._CalenderService.appointments.forEach((appointment) => {
-      appointment.color = this._CalenderService.getRandomColor();
-    });
-    this._CalenderService.generateView(this._CalenderService.currentView, this._CalenderService.viewDate);
-    this._CalenderService.generateTimeSlots();
+    // this._CalenderService.appointments.forEach((appointment) => {
+    //   appointment.color = this._CalenderService.getRandomColor();
+    // });
+    // this._CalenderService.generateView(this._CalenderService.CalendarView.Day, this._CalenderService.viewDate);
+    // this._CalenderService.generateView(this._CalenderService.CalendarView.Month, this._CalenderService.viewDate);
+    // this._CalenderService.generateView(this._CalenderService.CalendarView.Week, this._CalenderService.viewDate);
+    // this._CalenderService.generateTimeSlots();
   }
 
 
