@@ -1,0 +1,30 @@
+<!-- Day View -->
+<table width="100%" cellspacing="0" cellpadding="0" class="calendar-view-day"
+    *ngIf="_CalenderService.currentView === 'day'">
+    <tbody cdkDropListGroup>
+        <tr *ngFor="let slot of _CalenderService.timeSlots">
+            <td [width]="10" class="calendar-slot-cell">
+                <span>{{ slot }}</span>
+            </td>
+            <td cdkDropList (cdkDropListDropped)="_CalenderService.drop($event, _CalenderService.monthDays[0], slot)"
+                [cdkDropListData]="this._CalenderService.appointments">
+                <div (click)="_CalenderService.selectDate(_CalenderService.monthDays[0], slot)"
+                    (keydown.enter)="_CalenderService.selectDate(_CalenderService.monthDays[0], slot)"
+                    (keydown.space)="_CalenderService.selectDate(_CalenderService.monthDays[0], slot)"
+                    class="cell-overlay" tabindex="0"></div>
+                <div tabindex="0" *ngFor="
+                  let appointment of _CalenderService.getAppointmentsForDateTime(
+                    _CalenderService.monthDays[0],
+                    slot
+                  )
+                " class="appointment" cdkDrag cdkDragHandle [cdkDragData]="appointment"
+                    [ngStyle]="{ 'background-color': appointment.color }"
+                    (click)="_CalenderService.editAppointment(appointment, $event)"
+                    (keydown.enter)="_CalenderService.editAppointment(appointment, $event)"
+                    (keydown.space)="_CalenderService.editAppointment(appointment, $event)">
+                    <span>{{ appointment.title }}</span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

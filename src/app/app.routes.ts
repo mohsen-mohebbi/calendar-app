@@ -6,5 +6,5 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./calendar/calendar.module').then((m) => m.CalendarModule),
   },
-  { path: '', redirectTo: '/calendar', pathMatch: 'full' },
+  { path: '', redirectTo: '/calendar/calendermonth', pathMatch: 'full' },  // مسیر ریدایرکت
 ];

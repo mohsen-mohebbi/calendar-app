@@ -1,0 +1,40 @@
+<!-- Week View -->
+<table width="100%" cellspacing="0" cellpadding="0" class="calendar-view-week"
+    *ngIf="_CalenderService.currentView === 'week'">
+    <thead>
+        <tr>
+            <th></th>
+            <th *ngFor="let day of _CalenderService.weekDays; index as i">
+                {{ day }} {{ _CalenderService.monthDays[i].getDate() }}
+            </th>
+        </tr>
+    </thead>
+    <tbody cdkDropListGroup>
+        <tr *ngFor="let timeSlot of _CalenderService.timeSlots">
+            <td [width]="10" class="calendar-slot-cell">
+                <span>{{ timeSlot }}</span>
+            </td>
+            <td *ngFor="let day of _CalenderService.weekDays; index as i" cdkDropList
+                (cdkDropListDropped)="_CalenderService.drop($event, _CalenderService.monthDays[i], timeSlot)"
+                [cdkDropListData]="this._CalenderService.appointments">
+                <div (click)="_CalenderService.selectDate(_CalenderService.monthDays[i], timeSlot)"
+                    (keydown.enter)="_CalenderService.selectDate(_CalenderService.monthDays[i], timeSlot)"
+                    (keydown.space)="_CalenderService.selectDate(_CalenderService.monthDays[i], timeSlot)"
+                    class="cell-overlay" tabindex="0">
+                </div>
+                <div tabindex="0" *ngFor="
+                  let appointment of _CalenderService.getAppointmentsForDateTime(
+                    _CalenderService.monthDays[i],
+                    timeSlot
+                  )
+                " class="appointment" cdkDrag cdkDragHandle [cdkDragData]="appointment"
+                    [ngStyle]="{ 'background-color': appointment.color }"
+                    (click)="_CalenderService.editAppointment(appointment, $event)"
+                    (keydown.enter)="_CalenderService.editAppointment(appointment, $event)"
+                    (keydown.space)="_CalenderService.editAppointment(appointment, $event)">
+                    <span>{{ appointment.title }}</span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

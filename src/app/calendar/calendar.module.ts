@@ -10,11 +10,15 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AppointmentModalComponent } from '../appointment-modal/appointment-modal.component';
-
-const routes: Routes = [{ path: '', component: CalendarComponent }];
+import { CalenderWeekViewComponent } from './components/calender-week-view/calender-week-view.component';
+import { CalenderMonthViewComponent } from './components/calender-month-view/calender-month-view.component';
+import { CalenderDayViewComponent } from './components/calender-day-view/calender-day-view.component';
+import { CalenderRoutingModule } from './calendar-routing.module';
 
 @NgModule({
-  declarations: [CalendarComponent],
+  declarations: [CalendarComponent, CalenderWeekViewComponent,
+    CalenderMonthViewComponent,
+    CalenderDayViewComponent,],
   imports: [
     CommonModule,
     MatButtonModule,
@@ -23,7 +27,7 @@ const routes: Routes = [{ path: '', component: CalendarComponent }];
     MatIconModule,
     DragDropModule,
     AppointmentModalComponent,
-    RouterModule.forChild(routes),
+    CalenderRoutingModule
   ],
 })
-export class CalendarModule {}
+export class CalendarModule { }

@@ -1,0 +1,37 @@
+<!-- Month @start -->
+<table width="100%" cellspacing="0" cellpadding="0" class="calendar-view-month"
+    *ngIf="_CalenderService.currentView === 'month'">
+    <thead>
+        <tr>
+            <th *ngFor="let day of _CalenderService.weekDays">
+                {{ day }}
+            </th>
+        </tr>
+    </thead>
+    <tbody cdkDropListGroup>
+        <tr *ngFor="let week of _CalenderService.weeks">
+            <td *ngFor="let date of week" cdkDropList (cdkDropListDropped)="_CalenderService.drop($event, date)"
+                [cdkDropListData]="this._CalenderService.appointments" [class.today]="_CalenderService.isToday(date)"
+                [ngStyle]="{ opacity: _CalenderService.isCurrentMonth(date) ? '1' : '0.5' }">
+                <div (click)="_CalenderService.selectDate(date)" (keydown.enter)="_CalenderService.selectDate(date)"
+                    (keydown.space)="_CalenderService.selectDate(date)" class="cell-overlay" tabindex="0"></div>
+                <div class="date">
+                    {{ date.getDate() }}
+                </div>
+                <div class="appointments">
+                    <ng-container *ngFor="let appointment of this._CalenderService.appointments">
+                        <div tabindex="0" *ngIf="_CalenderService.isSameDate(appointment.date, date)"
+                            class="appointment" cdkDrag cdkDragHandle [cdkDragData]="appointment"
+                            [ngStyle]="{ 'background-color': appointment.color }"
+                            (click)="_CalenderService.editAppointment(appointment, $event)"
+                            (keydown.enter)="_CalenderService.editAppointment(appointment, $event)"
+                            (keydown.space)="_CalenderService.editAppointment(appointment, $event)">
+                            <span>{{ appointment.title }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- Month @end -->
