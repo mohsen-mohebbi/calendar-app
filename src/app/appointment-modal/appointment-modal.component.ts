@@ -1,20 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
+import { Subject, Observable } from 'rxjs';  // Importing RxJS operators
 
 @Component({
   selector: 'app-appointment-modal',
@@ -33,16 +25,15 @@ import { CommonModule } from '@angular/common';
 })
 export class AppointmentModalComponent {
   appointmentFormGroup: FormGroup;
+  private formSubmitSubject: Subject<any> = new Subject();  // RxJS Subject for form submission
+  
+  // Observable for form submission events
+  formSubmit$: Observable<any> = this.formSubmitSubject.asObservable();
+
   constructor(
     public dialogRef: MatDialogRef<AppointmentModalComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public modalData: {
-      uuid: string;
-      date: Date;
-      title: string;
-      startTime: string;
-      endTime: string;
-    },
+    public modalData: { uuid: string; date: Date; title: string; startTime: string; endTime: string },
     private formBuilder: FormBuilder
   ) {
     this.appointmentFormGroup = this.formBuilder.group(
@@ -56,10 +47,12 @@ export class AppointmentModalComponent {
     );
   }
 
+  // Close the modal
   onClose(): void {
     this.dialogRef.close();
   }
 
+  // Submit the form and notify using RxJS
   onSubmit(): void {
     if (this.appointmentFormGroup.valid) {
       const formData = {
@@ -69,17 +62,18 @@ export class AppointmentModalComponent {
         endTime: this.appointmentFormGroup.controls['endTime'].value,
         uuid: this.modalData.uuid,
       };
+      this.formSubmitSubject.next(formData);  // Emit form data to observers
       this.dialogRef.close(formData);
     }
   }
 
+  // Trigger the deletion process
   onDelete(): void {
     this.dialogRef.close({ remove: true, uuid: this.modalData.uuid });
   }
 
-  timeRangeValidator: ValidatorFn = (
-    control: AbstractControl
-  ): ValidationErrors | null => {
+  // Time range validation
+  timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const startTime = control.get('startTime')?.value;
     const endTime = control.get('endTime')?.value;
     if (startTime && endTime) {
