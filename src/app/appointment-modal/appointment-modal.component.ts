@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { CommonModule } from '@angular/common';
 import { Subject, Observable } from 'rxjs';  // Importing RxJS operators
+import { AppointmentService } from '../shared/services/appointment.service';
 
 @Component({
   selector: 'app-appointment-modal',
@@ -26,25 +27,23 @@ import { Subject, Observable } from 'rxjs';  // Importing RxJS operators
 export class AppointmentModalComponent {
   appointmentFormGroup: FormGroup;
   private formSubmitSubject: Subject<any> = new Subject();  // RxJS Subject for form submission
-  
+
   // Observable for form submission events
   formSubmit$: Observable<any> = this.formSubmitSubject.asObservable();
 
   constructor(
     public dialogRef: MatDialogRef<AppointmentModalComponent>,
-    @Inject(MAT_DIALOG_DATA)
-    public modalData: { uuid: string; date: Date; title: string; startTime: string; endTime: string },
-    private formBuilder: FormBuilder
+    @Inject(MAT_DIALOG_DATA) public modalData: any,
+    private appointmentService: AppointmentService
   ) {
-    this.appointmentFormGroup = this.formBuilder.group(
-      {
-        title: [this.modalData.title || '', Validators.required],
-        date: [this.modalData.date, Validators.required],
-        startTime: [this.modalData.startTime || '', Validators.required],
-        endTime: [this.modalData.endTime || '', Validators.required],
-      },
-      { validators: this.timeRangeValidator }
-    );
+    this.appointmentFormGroup = this.appointmentService.createAppointmentForm(this.modalData);
+  }
+
+
+  ngOnInit(): void {
+    this.appointmentFormGroup.valueChanges.subscribe(() => {
+      this.appointmentFormGroup.updateValueAndValidity({ emitEvent: false });
+    });
   }
 
   // Close the modal
